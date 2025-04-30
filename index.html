@@ -35,19 +35,29 @@
             transform: scale(2);
             position: absolute;
             top: -250px;
-            font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
             color: white;
         }
 
         .description a {
             color: white;
         }
+
+        @media screen and (max-width: 600px) {
+            body {
+                transform: scale(0.3);
+            }
+            
+            .description {
+                transform: scale(3);
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="description">
-        Генеративный арт, вдохновленный работой <a href="https://w.wiki/Dx9H" target="_blank">Франсуа Морелле</a>
+        <p>Generative art inspired by <a href="https://w.wiki/Dx9H" target="_blank">François Morellet</a></p>
     </div>
     <svg viewBox="0 0 100 100" width="1080px" height="1080px" xmlns='http://www.w3.org/2000/svg'>
         <filter id="noiseFilter">
