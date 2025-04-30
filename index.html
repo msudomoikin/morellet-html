@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Generative Art</title>
+    <style>
+        body {
+            transform: scale(0.5);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #383838;
+        }
+
+        canvas {
+        }
+
+        svg {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            left: 50%;
+        }
+
+        svg, rect {
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <svg viewBox="0 0 100 100" width="1080px" height="1080px" xmlns='http://www.w3.org/2000/svg'>
+        <filter id="noiseFilter">
+            <feturbulence type="fractalNoise" baseFrequency="10" numOctaves="3" />
+            <feblend in="SourceGraphic" in2="noiseFilter" mode="overlay" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#noiseFilter)" opacity="0.2" />
+    </svg>
+    <canvas id="artCanvas" width="1080" height="1080"></canvas>
+
+    <script>
+        const canvas = document.getElementById('artCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const squareSize = 54;
+        const cols = Math.floor(canvas.width / squareSize);
+        const rows = Math.floor(canvas.height / squareSize);
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function drawSquare(x, y) {
+            const posX = x * squareSize;
+            const posY = y * squareSize;
+
+            // Случайный фоновый цвет
+            const bgColor = Math.random() < 0.5 ? '#313131' : '#f3f3f1';
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(posX, posY, squareSize, squareSize);
+
+            // Количество треугольников (0-3)
+            const triangleCount = getRandomInt(0, 3);
+
+            // Противоположный цвет для треугольников
+            const triColor = bgColor === '#313131' ? '#f3f3f1' : '#313131';
+
+            for (let i = 0; i < triangleCount; i++) {
+                drawTriangle(posX, posY, triColor);
+            }
+        }
+
+        function drawTriangle(baseX, baseY, color) {
+            // Координаты центра квадрата
+            const centerX = baseX + squareSize / 2;
+            const centerY = baseY + squareSize / 2;
+
+            // Выбираем случайную сторону квадрата
+            const side = getRandomInt(0, 3); // 0: top, 1: right, 2: bottom, 3: left
+
+            let points = [];
+
+            switch (side) {
+                case 0: // Верхняя сторона
+                    points = [
+                        { x: baseX, y: baseY },
+                        { x: baseX + squareSize, y: baseY },
+                        { x: centerX, y: centerY }
+                    ];
+                    break;
+                case 1: // Правая сторона
+                    points = [
+                        { x: baseX + squareSize, y: baseY },
+                        { x: baseX + squareSize, y: baseY + squareSize },
+                        { x: centerX, y: centerY }
+                    ];
+                    break;
+                case 2: // Нижняя сторона
+                    points = [
+                        { x: baseX, y: baseY + squareSize },
+                        { x: baseX + squareSize, y: baseY + squareSize },
+                        { x: centerX, y: centerY }
+                    ];
+                    break;
+                case 3: // Левая сторона
+                    points = [
+                        { x: baseX, y: baseY },
+                        { x: baseX, y: baseY + squareSize },
+                        { x: centerX, y: centerY }
+                    ];
+                    break;
+            }
+
+            // Рисуем треугольник
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            ctx.lineTo(points[1].x, points[1].y);
+            ctx.lineTo(points[2].x, points[2].y);
+            ctx.closePath();
+
+            ctx.fillStyle = color;
+            ctx.fill();
+        }
+
+        // Основная функция рисования
+        function draw() {
+            // Очистка холста
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Рисование квадратов
+            for (let x = 0; x < cols; x++) {
+                for (let y = 0; y < rows; y++) {
+                    drawSquare(x, y);
+                }
+            }
+        }
+
+        // Запуск рисования
+        draw();
+
+        // Добавляем возможность повторного рисования по клику
+        canvas.addEventListener('click', draw);
+    </script>
+</body>
+
+</html>
