@@ -15,7 +15,9 @@
         }
 
         canvas {
+            cursor: pointer;
         }
+
 
         svg {
             position: absolute;
@@ -24,13 +26,29 @@
             left: 50%;
         }
 
-        svg, rect {
+        svg,
+        rect {
             pointer-events: none;
+        }
+
+        .description {
+            transform: scale(2);
+            position: absolute;
+            top: -250px;
+            font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            color: white;
+        }
+
+        .description a {
+            color: white;
         }
     </style>
 </head>
 
 <body>
+    <div class="description">
+        Генеративный арт, вдохновленный работой <a href="https://w.wiki/Dx9H" target="_blank">Франсуа Морелле</a>
+    </div>
     <svg viewBox="0 0 100 100" width="1080px" height="1080px" xmlns='http://www.w3.org/2000/svg'>
         <filter id="noiseFilter">
             <feturbulence type="fractalNoise" baseFrequency="10" numOctaves="3" />
